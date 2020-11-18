@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.ExamPaperInfoMapper">
+    <resultMap id="BaseResultMap" type="com.qhit.pojo.ExamPaperInfo">
+        <id column="examPaperId" property="examPaperId" jdbcType="INTEGER"/>
+        <result column="examPaperName" property="examPaperName" jdbcType="VARCHAR"/>
+        <result column="subjectNum" property="subjectNum" jdbcType="INTEGER"/>
+        <result column="examPaperTime" property="examPaperTime" jdbcType="INTEGER"/>
+        <result column="examPaperScore" property="examPaperScore" jdbcType="INTEGER"/>
+        <result column="gradeId" property="gradeId" jdbcType="INTEGER"/>
+        <result column="division" property="division" jdbcType="INTEGER"/>
+        <result column="examPaperEasy" property="examPaperEasy" jdbcType="INTEGER"/>
+        <!-- 对应年级 -->
+        <association property="grade" javaType="com.qhit.pojo.GradeInfo">
+            <id column="gradeId" property="gradeId"/>
+            <result column="gradeName" property="gradeName"/>
+        </association>
+    </resultMap>
+    <sql id="Base_Column_List">
+    examPaperId, examPaperName, subjectNum, examPaperTime, examPaperScore, gradeId, division, 
+    examPaperEasy
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+       SELECT a.*,b.gradeName FROM ExamPaperInfo a INNER
+		JOIN GradeInfo b ON a.gradeId=b.gradeId
+		WHERE examPaperId=#{examPaperId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from exampaperinfo
+    where examPaperId = #{exampaperid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.qhit.pojo.ExamPaperInfo">
+    insert into exampaperinfo (examPaperId, examPaperName, subjectNum, 
+      examPaperTime, examPaperScore, gradeId, 
+      division, examPaperEasy)
+    values (#{exampaperid,jdbcType=INTEGER}, #{exampapername,jdbcType=VARCHAR}, #{subjectnum,jdbcType=INTEGER}, 
+      #{exampapertime,jdbcType=INTEGER}, #{exampaperscore,jdbcType=INTEGER}, #{gradeid,jdbcType=INTEGER}, 
+      #{division,jdbcType=INTEGER}, #{exampapereasy,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.qhit.pojo.ExamPaperInfo">
+        insert into exampaperinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examPaperId != null">
+                examPaperId,
+            </if>
+            <if test="examPaperName != null">
+                examPaperName,
+            </if>
+            <if test="subjectNum != null">
+                subjectNum,
+            </if>
+            <if test="examPaperTime != null">
+                examPaperTime,
+            </if>
+            <if test="examPaperScore != null">
+                examPaperScore,
+            </if>
+            <if test="gradeId != null">
+                gradeId,
+            </if>
+            <if test="division != null">
+                division,
+            </if>
+            <if test="examPaperEasy != null">
+                examPaperEasy,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examPaperId != null">
+                #{examPaperId,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperName != null">
+                #{examPaperName,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectNum != null">
+                #{subjectNum,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperTime != null">
+                #{examPaperTime,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperScore != null">
+                #{examPaperScore,jdbcType=INTEGER},
+            </if>
+            <if test="gradeId != null">
+                #{gradeId,jdbcType=INTEGER},
+            </if>
+            <if test="division != null">
+                #{division,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperEasy != null">
+                #{examPaperEasy,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.qhit.pojo.ExamPaperInfo">
+        update exampaperinfo
+        <set>
+            <if test="examPaperName != null">
+                examPaperName = #{examPaperName,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectNum != null">
+                subjectNum = #{subjectNum,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperTime != null">
+                examPaperTime = #{examPaperTime,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperScore != null">
+                examPaperScore = #{examPaperScore,jdbcType=INTEGER},
+            </if>
+            <if test="gradeId != null">
+                gradeId = #{gradeId,jdbcType=INTEGER},
+            </if>
+            <if test="division != null">
+                division = #{division,jdbcType=INTEGER},
+            </if>
+            <if test="examPaperEasy != null">
+                examPaperEasy = #{examPaperEasy,jdbcType=INTEGER},
+            </if>
+        </set>
+        where examPaperId = #{examPaperId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.qhit.pojo.ExamPaperInfo">
+    update exampaperinfo
+    set examPaperName = #{exampapername,jdbcType=VARCHAR},
+      subjectNum = #{subjectnum,jdbcType=INTEGER},
+      examPaperTime = #{exampapertime,jdbcType=INTEGER},
+      examPaperScore = #{exampaperscore,jdbcType=INTEGER},
+      gradeId = #{gradeid,jdbcType=INTEGER},
+      division = #{division,jdbcType=INTEGER},
+      examPaperEasy = #{exampapereasy,jdbcType=INTEGER}
+    where examPaperId = #{exampaperid,jdbcType=INTEGER}
+  </update>
+
+
+    <resultMap type="com.qhit.pojo.ExamPaperInfo" id="queryExamPaper">
+        <id column="examPaperId" property="examPaperId"/>
+        <result column="examPaperName" property="examPaperName"/>
+        <result column="subjectNum" property="subjectNum"/>
+        <result column="examPaperTime" property="examPaperTime"/>
+        <result column="examPaperScore" property="examPaperScore"/>
+        <result column="division" property="division"/>
+        <result column="examPaperEasy" property="examPaperEasy"/>
+        <!-- 对应年级 -->
+        <association property="grade" javaType="com.qhit.pojo.GradeInfo">
+            <id column="gradeId" property="gradeId"/>
+            <result column="gradeName" property="gradeName"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllExamPaper" resultMap="queryExamPaper" parameterType="Map">
+        SELECT a.*,b.gradeName FROM ExamPaperInfo a INNER
+        JOIN GradeInfo b ON a.gradeId=b.gradeId
+        <if test="end!=null and end!=''">
+            limit #{start},12
+        </if>
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(0) from exampaperinfo;
+</select>
+<!--查看试卷  不要删-->
+    <select id="getAllExamPaperInfo" resultType="com.qhit.pojo.ExamPaperInfo">
+        select * from exampaperinfo
+    </select>
+
+    <update id="isUpdateExamPaperSubjects" parameterType="java.util.Map">
+        UPDATE ExamPaperInfo SET subjectNum=subjectNum+#{subjectNum}
+        WHERE examPaperId=#{examPaperId}
+    </update>
+
+    <!-- 修改试卷总分 -->
+    <update id="isUpdateExamPaperScore" parameterType="java.util.Map">
+        UPDATE ExamPaperInfo SET examPaperScore=examPaperScore+#{score}
+        WHERE examPaperId=#{examPaperId}
+    </update>
+
+    <!-- 添加试卷 -->
+    <insert id="isAddExamPaper" parameterType="com.qhit.pojo.ExamPaperInfo" useGeneratedKeys="true" keyProperty="examPaperId">
+        INSERT INTO ExamPaperInfo VALUES(NULL, #{examPaperName}, #{subjectNum}, #{examPaperTime}, #{examPaperScore}, #{grade.gradeId}, #{division}, #{examPaperEasy})
+    </insert>
+</mapper>

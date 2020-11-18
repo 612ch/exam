@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.ExamPlanInfoMapper" >
+
+  <!--查询所有Examplaninfo信息-->
+  <resultMap type="com.qhit.pojo.ExamPlanInfo" id="examPlanResultMap">
+    <id column="examPlanId" property="examPlanId"/>
+    <result column="beginTime" property="beginTime"/>
+    <association property="course" javaType="com.qhit.pojo.CourseInfo">
+      <id column="courseId" property="courseId"/>
+      <result column="courseName" property="courseName"/>
+    </association>
+    <association property="clazz" javaType="com.qhit.pojo.ClassInfo">
+      <id column="classId" property="classId"/>
+      <result column="className" property="className"/>
+    </association>
+    <association property="examPaper" javaType="com.qhit.pojo.ExamPaperInfo">
+      <id column="examPaperId" property="examPaperId"/>
+      <result column="examPaperName" property="examPaperName"/>
+      <result column="subjectNum" property="subjectNum"/>
+      <!--<result column="examPaperTime" property="exampaperTime"/>-->
+    </association>
+  </resultMap>
+    <select id="getAll" resultMap="examPlanResultMap">
+        SELECT a.*,b.courseName,c.className,d.examPaperName,d.subjectNum,d.examPaperTime FROM ExamPlanInfo a
+        INNER JOIN CourseInfo b ON a.courseId=b.courseId
+        INNER JOIN ClassInfo c ON a.classId=c.classId
+        INNER JOIN ExamPaperInfo d ON a.examPaperId=d.examPaperId
+        <where>
+            <if test="courseId != null">
+                a.courseId=#{courseId}
+            </if>
+            <if test="examPaperId != null">
+                OR a.examPaperId=#{examPaperId}
+            </if>
+            <if test="classId != null">
+                OR a.classId=#{classId}
+            </if>
+        </where>
+    </select>
+  <!--<select id="getAll" resultType="map">-->
+    <!--SELECT e.`examPaperId`,e.`beginTime`,c.`className`,co.`courseName`,ep.`examPaperName`,ep.`subjectNum`-->
+ <!--FROM examplaninfo e,classinfo c,courseinfo co,exampaperinfo ep-->
+ <!--WHERE e.`classId`=c.`classId` AND e.`courseId`=co.`courseId` AND e.`examPaperId`=ep.`examPaperId`-->
+  <!--</select>-->
+
+  <!--增加-->
+  <insert id="addExamPlanInfo" parameterType="com.qhit.pojo.ExamPlanInfo">
+		INSERT INTO ExamPlanInfo VALUES(NULL, #{course.courseId}, #{clazz.classId}, #{examPaper.examPaperId}, #{beginTime})
+	</insert>
+
+    <!--通过id查找其中一个-->
+    <select id="getExamPlanIdByexamPlanId" parameterType="Integer" resultMap="examPlanResultMap">
+      SELECT a.*,b.courseName,c.className,d.examPaperName,d.subjectNum FROM ExamPlanInfo a
+		INNER JOIN CourseInfo b ON a.courseId=b.courseId
+		INNER JOIN ClassInfo c ON a.classId=c.classId
+		INNER JOIN ExamPaperInfo d ON a.examPaperId=d.examPaperId
+		WHERE a.examPlanId=#{examPlanId}
+    </select>
+  <!--删除-->
+  <delete id="delExamPlanInfo" parameterType="int">
+		DELETE FROM ExamPlanInfo WHERE examPlanId=#{examPlanId}
+	</delete>
+  <!--修改-->
+  <update id="updateExamPlanInfo" parameterType="com.qhit.pojo.ExamPlanInfo">
+		UPDATE ExamPlanInfo SET courseId=#{course.courseId}, classId=#{clazz.classId}, examPaperId=#{examPaper.examPaperId}, beginTime=#{beginTime}
+		WHERE examPlanId=#{examPlanId}
+	</update>
+    <!-- 查询学生待考信息 -->
+    <select id="getStudentWillExam" parameterType="java.util.Map" resultMap="queryWillExam">
+        SELECT a.*,d.exampaperName,d.subjectNum,d.examPaperScore,d.examPaperEasy,d.examPaperTime,e.courseName FROM ExamPlanInfo a
+        INNER JOIN ClassInfo b ON a.classId=b.classId
+        INNER JOIN GradeInfo c ON b.gradeId=c.gradeId
+        INNER JOIN ExamPaperInfo d ON a.examPaperId=d.examPaperId
+        INNER JOIN CourseInfo e ON a.courseId=e.courseId
+        WHERE a.classId=#{classId} AND b.gradeId=#{gradeId}
+    </select>
+
+    <resultMap type="com.qhit.pojo.ExamPlanInfo" id="queryWillExam">
+        <id column="examPlanId" property="examPlanId"/>
+        <result column="beginTime" property="beginTime"/>
+        <!-- 科目 -->
+        <association property="course" javaType="com.qhit.pojo.CourseInfo">
+            <id column="courseId" property="courseId"/>
+            <result column="courseName" property="courseName"/>
+        </association>
+        <!-- 班级 -->
+        <association property="clazz" javaType="com.qhit.pojo.ClassInfo">
+            <id column="classId" property="classId"/>
+        </association>
+        <!-- 试卷 -->
+        <association property="examPaper" javaType="com.qhit.pojo.ExamPaperInfo">
+            <id column="examPaperId" property="examPaperId"/>
+            <result column="examPaperName" property="examPaperName"/>
+            <result column="subjectNum" property="subjectNum"/>
+            <result column="examPaperScore" property="examPaperScore"/>
+            <result column="examPaperEasy" property="examPaperEasy"/>
+            <result column="examPaperTime" property="examPaperTime"/>
+        </association>
+    </resultMap>
+
+</mapper>

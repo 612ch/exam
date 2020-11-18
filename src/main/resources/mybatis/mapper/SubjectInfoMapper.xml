@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.SubjectInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qhit.pojo.SubjectInfo" >
+    <id column="subjectId" property="subjectId" jdbcType="INTEGER" />
+    <result column="subjectName" property="subjectName" jdbcType="VARCHAR" />
+    <result column="optionA" property="optionA" jdbcType="VARCHAR" />
+    <result column="optionB" property="optionB" jdbcType="VARCHAR" />
+    <result column="optionC" property="optionC" jdbcType="VARCHAR" />
+    <result column="optionD" property="optionD" jdbcType="VARCHAR" />
+    <result column="rightResult" property="rightResult" jdbcType="VARCHAR" />
+    <result column="subjectScore" property="subjectScore" jdbcType="INTEGER" />
+    <result column="subjectType" property="subjectType" jdbcType="INTEGER" />
+    <result column="courseId" property="courseId" jdbcType="INTEGER" />
+    <result column="gradeId" property="gradeId" jdbcType="INTEGER" />
+    <result column="subjectEasy" property="subjectEasy" jdbcType="INTEGER" />
+    <result column="division" property="division" jdbcType="INTEGER" />
+    <!--年级-->
+    <association property="grade" javaType="com.qhit.pojo.GradeInfo">
+      <id property="gradeId" column="gradeId"/>
+      <result property="gradeName" column="gradeName"/>
+    </association>
+    <!--科目-->
+    <association property="course" javaType="com.qhit.pojo.CourseInfo">
+      <id property="courseId" column="courseId"/>
+      <result property="courseName" column="courseName"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    subjectId, subjectName, optionA, optionB, optionC, optionD, rightResult, subjectScore, 
+    subjectType, courseId, gradeId, subjectEasy, division
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from subjectinfo
+    where subjectId = #{subjectid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from subjectinfo
+    where subjectId = #{ID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qhit.pojo.SubjectInfo" >
+    insert into subjectinfo (subjectId, subjectName, optionA, 
+      optionB, optionC, optionD, 
+      rightResult, subjectScore, subjectType, 
+      courseId, gradeId, subjectEasy, 
+      division)
+    values (#{subjectid,jdbcType=INTEGER}, #{subjectname,jdbcType=VARCHAR}, #{optiona,jdbcType=VARCHAR}, 
+      #{optionb,jdbcType=VARCHAR}, #{optionc,jdbcType=VARCHAR}, #{optiond,jdbcType=VARCHAR}, 
+      #{rightresult,jdbcType=VARCHAR}, #{subjectscore,jdbcType=INTEGER}, #{subjecttype,jdbcType=INTEGER}, 
+      #{courseid,jdbcType=INTEGER}, #{gradeid,jdbcType=INTEGER}, #{subjecteasy,jdbcType=INTEGER}, 
+      #{division,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qhit.pojo.SubjectInfo" >
+    insert into subjectinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subjectId != null" >
+        subjectId,
+      </if>
+      <if test="subjectName != null" >
+        subjectName,
+      </if>
+      <if test="optionA != null" >
+        optionA,
+      </if>
+      <if test="optionB != null" >
+        optionB,
+      </if>
+      <if test="optionC != null" >
+        optionC,
+      </if>
+      <if test="optionD != null" >
+        optionD,
+      </if>
+      <if test="rightResult != null" >
+        rightResult,
+      </if>
+      <if test="subjectScore != null" >
+        subjectScore,
+      </if>
+      <if test="subjectType != null" >
+        subjectType,
+      </if>
+      <if test="courseId != null" >
+        courseId,
+      </if>
+      <if test="gradeId != null" >
+        gradeId,
+      </if>
+      <if test="subjectEasy != null" >
+        subjectEasy,
+      </if>
+      <if test="division != null" >
+        division,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subjectId != null" >
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectName != null" >
+        #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="optionA != null" >
+        #{optionA,jdbcType=VARCHAR},
+      </if>
+      <if test="optionB != null" >
+        #{optionB,jdbcType=VARCHAR},
+      </if>
+      <if test="optionC != null" >
+        #{optionC,jdbcType=VARCHAR},
+      </if>
+      <if test="optionD != null" >
+        #{optionD,jdbcType=VARCHAR},
+      </if>
+      <if test="rightResult != null" >
+        #{rightResult,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectScore != null" >
+        #{subjectScore,jdbcType=INTEGER},
+      </if>
+      <if test="subjectType != null" >
+        #{subjectType,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectEasy != null" >
+        #{subjectEasy,jdbcType=INTEGER},
+      </if>
+      <if test="division != null" >
+        #{division,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qhit.pojo.SubjectInfo" >
+    update subjectinfo
+    <set >
+      <if test="subjectName != null" >
+        subjectName = #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="optionA != null" >
+        optionA = #{optionA,jdbcType=VARCHAR},
+      </if>
+      <if test="optionB != null" >
+        optionB = #{optionB,jdbcType=VARCHAR},
+      </if>
+      <if test="optionC != null" >
+        optionC = #{optionC,jdbcType=VARCHAR},
+      </if>
+      <if test="optionD != null" >
+        optionD = #{optionD,jdbcType=VARCHAR},
+      </if>
+      <if test="rightResult != null" >
+        rightResult = #{rightResult,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectScore != null" >
+        subjectScore = #{subjectScore,jdbcType=INTEGER},
+      </if>
+      <if test="subjectType != null" >
+        subjectType = #{subjectType,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null" >
+        courseId = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null" >
+        gradeId = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectEasy != null" >
+        subjectEasy = #{subjectEasy,jdbcType=INTEGER},
+      </if>
+      <if test="division != null" >
+        division = #{division,jdbcType=INTEGER},
+      </if>
+    </set>
+    where subjectId = #{subjectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qhit.pojo.SubjectInfo" >
+    update subjectinfo
+    set subjectName = #{subjectname,jdbcType=VARCHAR},
+      optionA = #{optiona,jdbcType=VARCHAR},
+      optionB = #{optionb,jdbcType=VARCHAR},
+      optionC = #{optionc,jdbcType=VARCHAR},
+      optionD = #{optiond,jdbcType=VARCHAR},
+      rightResult = #{rightresult,jdbcType=VARCHAR},
+      subjectScore = #{subjectscore,jdbcType=INTEGER},
+      subjectType = #{subjecttype,jdbcType=INTEGER},
+      courseId = #{courseid,jdbcType=INTEGER},
+      gradeId = #{gradeid,jdbcType=INTEGER},
+      subjectEasy = #{subjecteasy,jdbcType=INTEGER},
+      division = #{division,jdbcType=INTEGER}
+    where subjectId = #{subjectid,jdbcType=INTEGER}
+  </update>
+
+  <select id="SelectSelective" parameterType="map" resultMap="BaseResultMap">
+    SELECT s.*,g.gradeName,c.courseName
+    FROM
+    subjectinfo s, gradeinfo g, courseinfo c
+    WHERE
+     s.`gradeId`=g.`gradeId` AND s.`courseId`=c.`courseId`
+    limit #{start},11
+  </select>
+  <select id="getTotalCount" resultType="int">
+      select count(0) from subjectinfo
+  </select>
+  <select id="getCourseList" resultType="com.qhit.pojo.CourseInfo">
+      select * from courseinfo
+</select>
+  <select id="getGradeList" resultType="com.qhit.pojo.GradeInfo">
+      select * from gradeinfo
+  </select>
+  <select id="isDelSubject" resultType="com.qhit.pojo.ExamChooseInfo" parameterType="java.lang.Integer">
+      SELECT * FROM examchooseinfo WHERE subjectId=#{ID}
+  </select>
+  <insert id="addSubject" parameterType="com.qhit.pojo.SubjectInfo">
+		INSERT INTO SubjectInfo VALUES
+		(NULL, #{subjectName}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{rightResult}, #{subjectScore}, #{subjectType}, #{courseId}, #{gradeId}, #{subjectEasy}, #{division})
+</insert>
+  <select id="getSubjectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+      SELECT a.*, b.courseName, c.gradeName FROM SubjectInfo a
+		LEFT JOIN CourseInfo b ON a.courseId=b.courseId
+		LEFT JOIN GradeInfo c ON a.gradeId=c.gradeId
+      where subjectId=#{subjectId}
+  </select>
+
+  <resultMap type="com.qhit.pojo.SubjectInfo" id="querySubjects">
+    <id column="subjectId" property="subjectId"/>
+    <result column="subjectName" property="subjectName"/>
+    <result column="optionA" property="optionA"/>
+    <result column="optionB" property="optionB"/>
+    <result column="optionC" property="optionC"/>
+    <result column="optionD" property="optionD"/>
+    <result column="rightResult" property="rightResult"/>
+    <result column="subjectScore" property="subjectScore"/>
+    <result column="subjectType" property="subjectType"/>
+    <result column="subjectEasy" property="subjectEasy"/>
+    <result column="division" property="division"/>
+    <!-- 科目 -->
+    <association property="course" javaType="com.qhit.pojo.CourseInfo">
+      <id column="courseId" property="courseId"/>
+      <result column="courseName" property="courseName"/>
+    </association>
+    <!-- 年级 -->
+    <association property="grade" javaType="com.qhit.pojo.GradeInfo">
+      <id column="gradeId" property="gradeId"/>
+      <result column="gradeName" property="gradeName"/>
+    </association>
+  </resultMap>
+
+  <parameterMap type="java.util.Map" id="getSubjectsParameterMap">
+    <parameter property="subject" resultMap="querySubjects"/>
+    <parameter property="startIndex" resultMap="querySubjects"/>
+    <parameter property="pageShow" resultMap="querySubjects"/>
+  </parameterMap>
+
+
+  <sql id="querySubjectSql">
+    SELECT a.*, b.courseName, c.gradeName FROM SubjectInfo a
+    LEFT JOIN CourseInfo b ON a.courseId=b.courseId
+    LEFT JOIN GradeInfo c ON a.gradeId=c.gradeId
+  </sql>
+  <!-- 获取试题集合 -->
+  <select id="getSubjects" parameterMap="getSubjectsParameterMap" resultMap="querySubjects">
+    <include refid="querySubjectSql"></include>
+    <where>
+      <if test="subject != null">
+        <if test="subject.subjectId != null">
+          subjectId=#{subjectId}
+        </if>
+        <if test="subject.course != null">
+          OR a.courseId=#{subject.course.courseId}
+        </if>
+        <if test="subject.grade != null">
+          OR a.gradeId=#{subject.grade.gradeId}
+        </if>
+      </if>
+    </where>
+    <if test="startIndex != null and pageShow != null">
+      LIMIT #{startIndex}, #{pageShow}
+    </if>
+  </select>
+
+  <!-- 批量添加试题 -->
+  <insert id="isAddSubjects" parameterType="java.util.Map">
+    INSERT INTO SubjectInfo VALUES
+    <if test="subjects != null">
+      <foreach collection="subjects" item="subject" close=";" separator=",">
+        (NULL, #{subject.subjectName}, #{subject.optionA}, #{subject.optionB}, #{subject.optionC}, #{subject.optionD}, #{subject.rightResult}, #{subject.subjectScore}, #{subject.subjectType}, #{subject.course.courseId}, #{subject.grade.gradeId}, #{subject.subjectEasy}, #{subject.division})
+      </foreach>
+    </if>
+  </insert>
+
+  <!-- 添加试题 -->
+  <insert id="isAddSubject" parameterType="com.qhit.pojo.SubjectInfo" useGeneratedKeys="true" keyProperty="subjectId">
+    INSERT INTO SubjectInfo VALUES
+    (NULL, #{subjectName}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{rightResult}, #{subjectScore}, #{subjectType}, #{course.courseId}, #{grade.gradeId}, #{subjectEasy}, #{division})
+  </insert>
+</mapper>

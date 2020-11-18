@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.TeacherInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qhit.pojo.TeacherInfo" >
+    <id column="teacherId" property="teacherid" jdbcType="INTEGER" />
+    <result column="teacherName" property="teachername" jdbcType="VARCHAR" />
+    <result column="teacherAccount" property="teacheraccount" jdbcType="VARCHAR" />
+    <result column="teacherPwd" property="teacherpwd" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="adminPower" property="adminpower" jdbcType="INTEGER" />
+    <result column="isWork" property="iswork" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    teacherId, teacherName, teacherAccount, teacherPwd, salt, adminPower, isWork
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from teacherinfo
+    where teacherId = #{teacherid,jdbcType=INTEGER}
+  </select>
+
+  <select id="getTeacherByName" resultType="com.qhit.pojo.TeacherInfo" parameterType="String" >
+    select
+    <include refid="Base_Column_List" />
+    from teacherinfo
+    where teacherAccount=#{1}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacherinfo
+    where teacherId = #{teacherid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qhit.pojo.TeacherInfo" >
+    insert into teacherinfo (teacherId, teacherName, teacherAccount, 
+      teacherPwd, salt, adminPower, 
+      isWork)
+    values (#{teacherid,jdbcType=INTEGER}, #{teachername,jdbcType=VARCHAR}, #{teacheraccount,jdbcType=VARCHAR}, 
+      #{teacherpwd,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{adminpower,jdbcType=INTEGER}, 
+      #{iswork,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qhit.pojo.TeacherInfo" >
+    insert into teacherinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teacherid != null" >
+        teacherId,
+      </if>
+      <if test="teachername != null" >
+        teacherName,
+      </if>
+      <if test="teacheraccount != null" >
+        teacherAccount,
+      </if>
+      <if test="teacherpwd != null" >
+        teacherPwd,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="adminpower != null" >
+        adminPower,
+      </if>
+      <if test="iswork != null" >
+        isWork,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teacherid != null" >
+        #{teacherid,jdbcType=INTEGER},
+      </if>
+      <if test="teachername != null" >
+        #{teachername,jdbcType=VARCHAR},
+      </if>
+      <if test="teacheraccount != null" >
+        #{teacheraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherpwd != null" >
+        #{teacherpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="adminpower != null" >
+        #{adminpower,jdbcType=INTEGER},
+      </if>
+      <if test="iswork != null" >
+        #{iswork,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qhit.pojo.TeacherInfo" >
+    update teacherinfo
+    <set >
+      <if test="teachername != null" >
+        teacherName = #{teachername,jdbcType=VARCHAR},
+      </if>
+      <if test="teacheraccount != null" >
+        teacherAccount = #{teacheraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherpwd != null" >
+        teacherPwd = #{teacherpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="adminpower != null" >
+        adminPower = #{adminpower,jdbcType=INTEGER},
+      </if>
+      <if test="iswork != null" >
+        isWork = #{iswork,jdbcType=INTEGER},
+      </if>
+    </set>
+    where teacherId = #{teacherid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qhit.pojo.TeacherInfo" >
+    update teacherinfo
+    set teacherName = #{teachername,jdbcType=VARCHAR},
+      teacherAccount = #{teacheraccount,jdbcType=VARCHAR},
+      teacherPwd = #{teacherpwd,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      adminPower = #{adminpower,jdbcType=INTEGER},
+      isWork = #{iswork,jdbcType=INTEGER}
+    where teacherId = #{teacherid,jdbcType=INTEGER}
+  </update>
+
+  <!--使用resultMap进行多表联查-->
+  <resultMap type="com.qhit.pojo.TeacherInfo" id="getTeacherResultMap">
+    <id column="teacherId" property="teacherId"/>
+    <result column="teacherName" property="teacherName" />
+    <result column="teacherAccount" property="teacherAccount"/>
+    <result column="teacherPwd" property="teacherPwd"/>
+    <result column="adminPower" property="adminPower"/>
+    <result column="isWork" property="isWork"/>
+    <association property="classInfo" javaType="com.qhit.pojo.ClassInfo">
+      <id column="classId" property="classId"/>
+      <result column="className" property="className"/>
+    </association>
+  </resultMap>
+  <!--&lt;!&ndash; 使用 paramenterMap 查询 &ndash;&gt;-->
+  <select id="getAll" resultMap="getTeacherResultMap" parameterType="map">
+        SELECT a.*,b.classId,b.className FROM TeacherInfo a
+        LEFT JOIN ClassInfo b ON a.teacherId=b.teacherId
+    <if test="end!=null and end!=''">
+      limit #{start},#{end}
+    </if>
+    </select>
+
+  <!--查看教师-->
+  <select id="getTeacherInfoByteacherId" resultType="com.qhit.pojo.TeacherInfo" parameterType="int">
+    select * from teacherinfo where `teacherId`=#{teacherId};
+  </select>
+
+  <update id="updateTeacherInfo" parameterType="com.qhit.pojo.TeacherInfo">
+    update teacherinfo
+    <set>
+      <if test="teacherName!=null">
+        `teacherName`=#{teacherName},
+      </if>
+      <if test="teacherAccount!=null">
+        `teacherAccount`=#{teacherAccount},
+      </if>
+      <if test="teacherPwd!=null">
+        `teacherPwd`=#{teacherPwd},
+      </if>
+      <if test="adminPower!=null">
+        `adminPower`=#{adminPower},
+      </if>
+      <if test="isWork!=null">
+        `isWork`=#{isWork},
+      </if>
+    </set>
+    where `teacherId`=#{teacherId};
+  </update>
+  <!--添加教师-->
+  <insert id="addTeacherInfo" parameterType="com.qhit.pojo.TeacherInfo">
+		INSERT INTO TeacherInfo VALUES(NULL,#{teacherName}, #{teacherAccount}, #{teacherPwd}, #{adminPower},0,#{teacherAccount})
+	</insert>
+  <!--<insert id="addTeacherInfo" parameterType="com.qhit.pojo.TeacherInfo">-->
+  <!--insert into teacherinfo(`teachername`,`teacheraccount`,`teacherpwd`,`adminpower`,`iswork`)-->
+  <!--values (#{teachername},#{teacheraccount},#{teacherpwd},#{adminpower},#{iswork});-->
+  <!--</insert>-->
+
+  <!-- 删除教师 -->
+  <delete id="deleteTeacherInfo" parameterType="int">
+		DELETE FROM TeacherInfo WHERE teacherId=#{teacherId}
+	</delete>
+  <!--<delete id="deleteTeacherInfo" parameterType="int">-->
+  <!--delete from teacherinfo where `teacherid`=#{teacherid};-->
+  <!--</delete>-->
+  <!--查询所有没有当班主任的教师-->
+  <select id="getIsWorkTearcher" resultType="com.qhit.pojo.TeacherInfo">
+    SELECT * FROM teacherinfo WHERE isWork=0
+  </select>
+
+  <update id="addIsWork" parameterType="int">
+    UPDATE teacherinfo SET isWork = 1 WHERE teacherId =#{1}
+  </update>
+
+  <update id="deleteIsWork" parameterType="int">
+    UPDATE teacherinfo SET isWork = 0 WHERE teacherId =#{1}
+  </update>
+
+  <!--获取教师总数-->
+  <select id="getCount" resultType="int">
+    select count(0) from teacherInfo;
+  </select>
+
+  <!--查找其中一个班级-->
+  <select id="getClassInfoByClassId" parameterType="int" resultType="com.qhit.pojo.ClassInfo">
+		SELECT * FROM ClassInfo a
+		LEFT JOIN TeacherInfo b ON a.teacherId=b.teacherId
+		LEFT JOIN GradeInfo c ON a.gradeId=c.gradeId
+		WHERE classId=#{classId}
+	</select>
+
+</mapper>

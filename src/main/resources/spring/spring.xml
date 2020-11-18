@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--引入资源文件-->
+    <context:property-placeholder location="classpath:db.properties,classpath:redis.properties"/>
+    <!--扫描service层-->
+    <context:component-scan base-package="com.qhit.service"/>
+<!--    &lt;!&ndash;扫描realm层&ndash;&gt;
+    <context:component-scan base-package="com.qhit.realm"/>-->
+    <!--扫描mapper层-->
+    <context:component-scan base-package="com.qhit.mapper"/>
+    <!--引入mybatis相关配置-->
+    <import resource="classpath:mybatis/mybatis-config.xml"/>
+    <!--引入redis相关配置-->
+    <import resource="classpath:redis/redis-config.xml"/>
+    <!--引入shiro相关配置-->
+    <import resource="classpath:shiro/shiro-config.xml"/>
+
+</beans>

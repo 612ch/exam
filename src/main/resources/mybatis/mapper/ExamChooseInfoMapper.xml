@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.ExamChooseInfoMapper" >
+  <!--<resultMap id="BaseResultMap" type="com.qhit.pojo.ExamChooseInfo" >-->
+    <!--<id column="chooseId" property="chooseId" jdbcType="INTEGER" />-->
+    <!--<result column="studentId" property="studentId" jdbcType="INTEGER" />-->
+    <!--<result column="examPaperId" property="exampaperid" jdbcType="INTEGER" />-->
+    <!--<result column="subjectId" property="subjectid" jdbcType="INTEGER" />-->
+    <!--<result column="chooseResult" property="chooseresult" jdbcType="VARCHAR" />-->
+  <!--</resultMap>-->
+  <resultMap type="com.qhit.pojo.ExamChooseInfo" id="BaseResultMap">
+    <id column="chooseId" property="chooseId"/>
+    <result column="chooseResult" property="chooseResult"/>
+    <association property="subject" javaType="com.qhit.pojo.SubjectInfo">
+      <id column="subjectId" property="subjectId"/>
+      <result column="subjectName" property="subjectName"/>
+      <result column="optionA" property="optionA"/>
+      <result column="optionB" property="optionB"/>
+      <result column="optionC" property="optionC"/>
+      <result column="optionD" property="optionD"/>
+      <result column="rightResult" property="rightResult"/>
+      <result column="subjectScore" property="subjectScore"/>
+      <result column="subjectEasy" property="subjectEasy"/>
+    </association>
+    <association property="examPaper" javaType="com.qhit.pojo.ExamPaperInfo">
+      <id column="examPaperId" property="examPaperId"/>
+      <result column="examPaperName" property="examPaperName"/>
+      <result column="examPaperScore" property="examPaperScore"/>
+      <result column="examPaperTime" property="examPaperTime"/>
+    </association>
+    <association property="student" javaType="com.qhit.pojo.StudentInfo">
+      <id column="studentId" property="studentId"/>
+    </association>
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List" >
+    chooseId, studentId, examPaperId, subjectId, chooseResult
+  </sql>
+
+  <select id="getChooseInfoWithExamSubject" parameterType="java.util.Map" resultMap="BaseResultMap">
+	  	SELECT
+		a.examPaperId,a.examPaperName,a.examPaperScore,
+		b.chooseId,b.studentId,b.chooseResult,
+		c.subjectId,c.subjectName,c.optionA,c.optionB,c.optionC,c.optionD,c.rightResult,c.subjectScore,c.subjectEasy
+		FROM ExamPaperInfo a
+		INNER JOIN ExamChooseInfo b ON a.examPaperId=b.examPaperId
+		INNER JOIN SubjectInfo c ON b.subjectId=c.subjectId
+		WHERE b.examPaperId=#{examPaperId} AND b.studentId=#{studentId};
+	  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from examchooseinfo
+    where chooseId = #{chooseid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from examchooseinfo
+    where chooseId = #{chooseid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qhit.pojo.ExamChooseInfo" >
+    insert into examchooseinfo (chooseId, studentId, examPaperId, 
+      subjectId, chooseResult)
+    values (#{chooseid,jdbcType=INTEGER}, #{studentid,jdbcType=INTEGER}, #{exampaperid,jdbcType=INTEGER}, 
+      #{subjectid,jdbcType=INTEGER}, #{chooseresult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qhit.pojo.ExamChooseInfo" >
+    insert into examchooseinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chooseid != null" >
+        chooseId,
+      </if>
+      <if test="studentid != null" >
+        studentId,
+      </if>
+      <if test="exampaperid != null" >
+        examPaperId,
+      </if>
+      <if test="subjectid != null" >
+        subjectId,
+      </if>
+      <if test="chooseresult != null" >
+        chooseResult,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chooseid != null" >
+        #{chooseid,jdbcType=INTEGER},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="exampaperid != null" >
+        #{exampaperid,jdbcType=INTEGER},
+      </if>
+      <if test="subjectid != null" >
+        #{subjectid,jdbcType=INTEGER},
+      </if>
+      <if test="chooseresult != null" >
+        #{chooseresult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qhit.pojo.ExamChooseInfo" >
+    update examchooseinfo
+    <set >
+      <if test="studentid != null" >
+        studentId = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="exampaperid != null" >
+        examPaperId = #{exampaperid,jdbcType=INTEGER},
+      </if>
+      <if test="subjectid != null" >
+        subjectId = #{subjectid,jdbcType=INTEGER},
+      </if>
+      <if test="chooseresult != null" >
+        chooseResult = #{chooseresult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where chooseId = #{chooseid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qhit.pojo.ExamChooseInfo" >
+    update examchooseinfo
+    set studentId = #{studentid,jdbcType=INTEGER},
+      examPaperId = #{exampaperid,jdbcType=INTEGER},
+      subjectId = #{subjectid,jdbcType=INTEGER},
+      chooseResult = #{chooseresult,jdbcType=VARCHAR}
+    where chooseId = #{chooseid,jdbcType=INTEGER}
+  </update>
+  <select id="getChooseWithIds" parameterType="java.util.Map" resultType="com.qhit.pojo.ExamChooseInfo">
+    SELECT * FROM ExamChooseInfo
+    WHERE studentId=#{studentId} AND examPaperId=#{examPaperId} AND subjectId=#{subjectId}
+  </select>
+  <!-- 根据学生编号、试卷编号、试题编号修改选择记录 -->
+  <update id="updateChooseWithIds" parameterType="com.qhit.pojo.ExamChooseInfo">
+    UPDATE ExamChooseInfo SET chooseResult=#{chooseResult}
+    WHERE chooseId=#{chooseId}
+  </update>
+
+  <insert id="addChoose" parameterType="java.util.Map">
+    INSERT INTO ExamChooseInfo VALUES
+    (NULL, #{studentId}, #{examPaperId}, #{subjectId}, #{chooseResult})
+  </insert>
+
+</mapper>

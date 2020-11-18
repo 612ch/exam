@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--配置安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="cacheManager" ref="cacheManager"/>
+        <!--配置一个realm-->
+        <!--<property name="myrealm" ref="myrealm"/>-->
+        <!--配置多个realm-->
+       <!-- <property name="realms">
+            <set>
+                <ref bean="myrealm"/>
+                <ref bean="myrealm1"/>
+            </set>
+        </property>-->
+        <!--配置认证器-->
+        <property name="authenticator" ref="authenticator"/>
+        <!--配置授权器-->
+        <!--<property name="authorizer" ref="authorizer"/>-->
+    </bean>
+    <!--认证器-->
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <property name="realms">
+            <set>
+                <ref bean="myrealm"/>
+                <ref bean="sturealm"/>
+            </set>
+        </property>
+        <!--配置认证策略-->
+        <!--<property name="authenticationStrategy">
+            <bean class="org.apache.shiro.authc.pam.AllSuccessfulStrategy"/>
+        </property>-->
+    </bean>
+    <!--授权器-->
+<!--    <bean id="authorizer" class="org.apache.shiro.authz.ModularRealmAuthorizer">
+        <property name="realms">
+            <set>
+                <bean class="com.qhit.realm.MyAuthorRealm"/>
+            </set>
+        </property>
+    </bean>-->
+    <!--配置自定义的realm-->
+    <bean id="myrealm" class="com.qhit.realm.TeacherRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+    <bean id="sturealm" class="com.qhit.realm.StudentRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+    <!--配置自定义的realm1-->
+<!--    <bean id="myrealm1" class="com.qhit.realm.Myrealm1">
+        <property name="shiroUserMapper" ref="shiroUserMapper"/>
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>-->
+    <!--密码解析器 设置加密方式和加密次数-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="MD5"/>
+        <property name="hashIterations" value="1024"/>
+    </bean>
+
+    <!--缓存管理器-->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:shiro/ehcache.xml"/>
+    </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!--有关注解的配置--><!--开启注解-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    <!--web远程调用 和网络相关的-->
+    <bean id="secureRemoteInvocationExecutor" class="org.apache.shiro.spring.remoting.SecureRemoteInvocationExecutor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/admin/index.jsp"/>
+           <property name="unauthorizedUrl" value="/unauthor.jsp"/>
+        <!--  <property name="filters">
+            <util:map>
+                <entry key="aName" value-ref="someFilterPojo"/>
+            </util:map>
+        </property>-->
+        <property name="filterChainDefinitions">
+            <value>
+                             <!--      /user/getAll.action authc,roles[admin],perms[user:find]
+                             /login.jsp=anon
+                                /shiroUser/*=anon
+                                /error.jsp=anon-->
+                /**=anon
+            </value>
+        </property>
+    </bean>
+    <aop:config proxy-target-class="true"/>
+
+</beans>

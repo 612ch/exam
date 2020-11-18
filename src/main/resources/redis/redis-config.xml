@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+<!--    <context:property-placeholder location="classpath:redis.properties"/>-->
+    <!--redis连接池配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxTotal}"></property>
+        <property name="maxIdle" value="${reids.maxIdle}"></property>
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"></property>
+        <property name="minIdle" value="${redis.minIdle}"></property>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"></property>
+    </bean>
+    <!--redis链接工厂-->
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.hostName}"
+          p:database="${redis.database}"
+          p:poolConfig-ref="jedisPoolConfig"
+          p:port="${redis.port}"
+          p:usePool="${redis.usePool}"
+
+    />
+    <!--redisTemplate-->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+          p:connectionFactory-ref="jedisConnectionFactory"
+    />
+    <!--redis连接操作类-->
+    <bean id="defaultRedisCacheWriter" class="org.springframework.data.redis.cache.DefaultRedisCacheWriter">
+        <constructor-arg name="connectionFactory" ref="jedisConnectionFactory" index="0"/>
+    </bean>
+    <!--默认的cache配置-->
+    <bean id="redisCacheConfiguration" class="org.springframework.data.redis.cache.RedisCacheConfiguration"
+          factory-method="defaultCacheConfig"
+    />
+    <!--配置redis缓存-->
+    <bean id="redisCache" class="org.springframework.data.redis.cache.RedisCache">
+        <constructor-arg name="name" value="default"/>
+        <constructor-arg name="cacheWriter" ref="defaultRedisCacheWriter"/>
+        <constructor-arg name="cacheConfig" ref="redisCacheConfiguration"/>
+    </bean>
+    <!--缓存管理-->
+    <bean id="simpleCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <ref bean="redisCache"/>
+            </set>
+        </property>
+    </bean>
+
+    <cache:annotation-driven cache-manager="simpleCacheManager"/>
+</beans>

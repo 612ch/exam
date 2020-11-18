@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qhit.mapper.StudentInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qhit.pojo.StudentInfo" >
+    <id column="studentId" property="studentId" jdbcType="INTEGER" />
+    <result column="studentName" property="studentName" jdbcType="VARCHAR" />
+    <result column="studentAccount" property="studentAccount" jdbcType="VARCHAR" />
+    <result column="studentPwd" property="studentPwd" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="classId" property="classId" jdbcType="INTEGER" />
+    <!--年级-->
+    <association property="grade" javaType="com.qhit.pojo.GradeInfo">
+      <id property="gradeId" column="gradeId"/>
+      <result property="gradeName" column="gradeName"/>
+  </association>
+    <!--班级-->
+    <association property="classInfo" javaType="com.qhit.pojo.ClassInfo">
+      <id property="classId" column="classId"/>
+      <result property="className" column="className"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    studentId, studentName, studentAccount, studentPwd, salt, classId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select s.*,cls.classId,cls.className
+    from StudentInfo s
+    INNER JOIN ClassInfo cls ON s.classId=cls.classId
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from studentinfo
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qhit.pojo.StudentInfo" >
+    insert into studentinfo (studentId, studentName, studentAccount, 
+      studentPwd, salt, classId
+      )
+    values (#{studentId,jdbcType=INTEGER}, #{studentName,jdbcType=VARCHAR}, #{studentAccount,jdbcType=VARCHAR},
+      #{studentPwd,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{classId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qhit.pojo.StudentInfo" >
+    insert into studentinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="studentId != null" >
+        studentId,
+      </if>
+      <if test="studentName != null" >
+        studentName,
+      </if>
+      <if test="studentAccount != null" >
+        studentAccount,
+      </if>
+      <if test="studentPwd != null" >
+        studentPwd,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="classId != null" >
+        classId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="studentId != null" >
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="studentName != null" >
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentAccount != null" >
+        #{studentAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="studentPwd != null" >
+        #{studentPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qhit.pojo.StudentInfo" >
+    update studentinfo
+    <set >
+      <if test="studentName != null" >
+        studentName = #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentAccount != null" >
+        studentAccount = #{studentAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="studentPwd != null" >
+        studentPwd = #{studentPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        classId = #{classId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qhit.pojo.StudentInfo" >
+    update studentinfo
+    set studentName = #{studentname,jdbcType=VARCHAR},
+      studentAccount = #{studentaccount,jdbcType=VARCHAR},
+      studentPwd = #{studentpwd,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      classId = #{classid,jdbcType=INTEGER}
+    where studentId = #{studentid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="SelectSelective" parameterType="map" resultMap="BaseResultMap">
+    select  s.* ,cls.className,g.gradeName
+    from
+    StudentInfo s INNER JOIN ClassInfo cls ON s.classId=cls.classId INNER JOIN GradeInfo g ON cls.gradeId=g.gradeId
+    limit #{start},11
+    <where>
+      <if test="studentId !=null and studentId!=''">
+        #{studentid,jdbcType=INTEGER}
+      </if>
+      <if test="studentName !=null and studentName!=''">
+        #{studentname,jdbcType=VARCHAR}
+      </if>
+      <if test="studentAccount !=null and studentAccount!=''">
+        #{studentaccount,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectByClassId" parameterType="int" resultType="com.qhit.pojo.StudentInfo">
+    SELECT * FROM studentinfo where classId=#{1}
+  </select>
+  <select id="getTotalCount" resultType="int">
+      select count(0) from StudentInfo
+  </select>
+
+  <select id="getExamStudent" resultType="com.qhit.pojo.StudentInfo" parameterType="int">
+       SELECT studentId,studentName FROM StudentInfo WHERE classId=(
+          SELECT classId FROM classinfo WHERE  teacherId =#{teacherId}
+       )
+  </select>
+
+
+
+  <resultMap id="myMap" type="com.qhit.pojo.StudentInfo" >
+    <result column="studentName" property="studentName" jdbcType="VARCHAR" />
+    <result column="examCount" property="examCount" jdbcType="INTEGER" />
+  </resultMap>
+
+<select id="getExamCount" parameterType="int" resultMap="myMap" >
+SELECT DISTINCT s.studentName ,COUNT(e.`studentId`) examCount  FROM  `studentinfo` s , `examhistoryinfo` e ,`classinfo` c
+WHERE s.`studentId`=e.`studentId`  AND s.`classId`=c.`classId`
+AND
+c.`teacherId`=#{teacherId}
+GROUP BY s.studentName
+</select>
+
+    <select id="getStudentByName" resultType="com.qhit.pojo.StudentInfo" parameterType="String" >
+        select
+        <include refid="Base_Column_List" />
+        from studentinfo
+        where studentAccount=#{1}
+    </select>
+
+  <select id="getGradeByClassId" parameterType="int" resultType="com.qhit.pojo.GradeInfo">
+    SELECT * FROM gradeinfo WHERE gradeId=(SELECT gradeId FROM classinfo where classId=#{1})
+  </select>
+
+
+  <!--通过名字查询考生考试过的试卷和分数-->
+  <resultMap id="myMap2" type="com.qhit.pojo.StudentInfo" >
+
+    <result column="examPaperName" property="examPaperName" jdbcType="VARCHAR" />
+    <result column="examScore" property="examScore" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getExamPaperANDexamScore" parameterType="String" resultMap="myMap2">
+    SELECT b.examPaperName , a.examScore  FROM `examhistoryinfo` a, `exampaperinfo` b
+WHERE a.examPaperId=b.examPaperId
+AND a.studentId=(
+SELECT studentId FROM `studentinfo`  WHERE  studentName=#{studentName}
+
+)</select>
+
+</mapper>
