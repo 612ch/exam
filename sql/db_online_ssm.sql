@@ -320,37 +320,39 @@ INSERT INTO `gradeinfo` VALUES ('4', '计算机1501');
 -- Table structure for `studentinfo`
 -- ----------------------------
 DROP TABLE IF EXISTS `studentinfo`;
-CREATE TABLE `studentinfo` (
+CREATE TABLE `studentinfo`  (
   `studentId` int(11) NOT NULL AUTO_INCREMENT,
-  `studentName` varchar(32) NOT NULL,
-  `studentAccount` varchar(64) NOT NULL,
-  `studentPwd` varchar(32) NOT NULL,
+  `studentName` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `studentAccount` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `studentPwd` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `salt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `classId` int(11) NOT NULL,
-  PRIMARY KEY (`studentId`),
-  KEY `FK_Reference_3` (`classId`),
-  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`classId`) REFERENCES `classinfo` (`classId`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`studentId`) USING BTREE,
+  INDEX `FK_Reference_3`(`classId`) USING BTREE,
+  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`classId`) REFERENCES `classinfo` (`classId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of studentinfo
 -- ----------------------------
-INSERT INTO `studentinfo` VALUES ('1', '谢鹏飞', 'xiepengfei', '123', '1');
-INSERT INTO `studentinfo` VALUES ('2', '兰妮', 'lanni', '123456', '2');
-INSERT INTO `studentinfo` VALUES ('3', '皮志高', 'pizhigao', '123456', '3');
-INSERT INTO `studentinfo` VALUES ('4', '权信', 'quanxin', '123456', '4');
-INSERT INTO `studentinfo` VALUES ('6', '寅鑫', 'xinyan', '123456', '4');
-INSERT INTO `studentinfo` VALUES ('7', '栋坤', 'dongkun', '123456', '6');
-INSERT INTO `studentinfo` VALUES ('8', '梁辰', 'liangchen', '123456', '7');
-INSERT INTO `studentinfo` VALUES ('9', '澄宇', 'chenyu', '123456', '8');
-INSERT INTO `studentinfo` VALUES ('10', '邓小飞', 'test', '123456', '2');
-INSERT INTO `studentinfo` VALUES ('11', '张君宝', 'zhangjb', '123456', '19');
-INSERT INTO `studentinfo` VALUES ('12', '张晓华', 'zhangxiaohua', '123456', '5');
-INSERT INTO `studentinfo` VALUES ('13', '张飞', 'zhangfei', '123456', '20');
-INSERT INTO `studentinfo` VALUES ('14', '关羽', 'guanyu', '123465', '7');
-INSERT INTO `studentinfo` VALUES ('15', '马超', 'machao', '123456', '9');
-INSERT INTO `studentinfo` VALUES ('16', '李世明', 'lishiming', '123456', '10');
-INSERT INTO `studentinfo` VALUES ('17', '猿来学生', 'yuanlaixs', '123456', '19');
-INSERT INTO `studentinfo` VALUES ('18', '李哲', 'lizhe', '123456', '19');
+INSERT INTO `studentinfo` VALUES (1, '谢鹏飞', 'xiepengfei', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 1);
+INSERT INTO `studentinfo` VALUES (2, '兰妮', 'lanni', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 2);
+INSERT INTO `studentinfo` VALUES (3, '皮志高', 'pizhigao', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 3);
+INSERT INTO `studentinfo` VALUES (4, '权信', 'quanxin', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 4);
+INSERT INTO `studentinfo` VALUES (6, '寅鑫', 'xinyan', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 4);
+INSERT INTO `studentinfo` VALUES (7, '栋坤', 'dongkun', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 6);
+INSERT INTO `studentinfo` VALUES (8, '梁辰', 'liangchen', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 7);
+INSERT INTO `studentinfo` VALUES (9, '澄宇', 'chenyu', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 8);
+INSERT INTO `studentinfo` VALUES (10, '邓小飞', 'test', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 2);
+INSERT INTO `studentinfo` VALUES (11, '张君宝', 'zhangjb', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 19);
+INSERT INTO `studentinfo` VALUES (12, '张晓华', 'zhangxiaohua', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 5);
+INSERT INTO `studentinfo` VALUES (13, '张飞', 'zhangfei', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 20);
+INSERT INTO `studentinfo` VALUES (14, '关羽', 'guanyu', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 7);
+INSERT INTO `studentinfo` VALUES (15, '马超', 'machao', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 9);
+INSERT INTO `studentinfo` VALUES (16, '李世明', 'lishiming', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 10);
+INSERT INTO `studentinfo` VALUES (17, '猿来学生', 'yuanlaixs', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 19);
+INSERT INTO `studentinfo` VALUES (18, '李哲', 'lizhe', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 19);
+INSERT INTO `studentinfo` VALUES (19, 'demon', 'demon', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 1);
 
 -- ----------------------------
 -- Table structure for `subjectinfo`
@@ -6902,36 +6904,38 @@ INSERT INTO `subjectinfo` VALUES ('6546', '你帅么？请具体阐述。', '', 
 -- Table structure for `teacherinfo`
 -- ----------------------------
 DROP TABLE IF EXISTS `teacherinfo`;
-CREATE TABLE `teacherinfo` (
+CREATE TABLE `teacherinfo`  (
   `teacherId` int(11) NOT NULL AUTO_INCREMENT,
-  `teacherName` varchar(10) DEFAULT NULL,
-  `teacherAccount` varchar(10) DEFAULT NULL,
-  `teacherPwd` varchar(10) DEFAULT NULL,
-  `adminPower` int(11) DEFAULT '0',
-  `isWork` int(11) DEFAULT '0',
-  PRIMARY KEY (`teacherId`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+  `teacherName` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `teacherAccount` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `teacherPwd` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `salt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `adminPower` int(11) NULL DEFAULT 0,
+  `isWork` int(11) NULL DEFAULT 0,
+  PRIMARY KEY (`teacherId`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of teacherinfo
 -- ----------------------------
-INSERT INTO `teacherinfo` VALUES ('1', '李银萍', 'liyinping', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('2', '皮长山', 'pcs', '123123', '1', '1');
-INSERT INTO `teacherinfo` VALUES ('3', '方正', 'fangzheng', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('4', '曾勇', 'zengy', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('5', '董勇', 'dongy', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('6', '周应琴', 'zhouyq', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('7', '万红兵', 'wanhb', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('8', '黄小荣', 'hxr123', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('9', '代丽敏', 'dailm', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('10', '赵国强', 'zgq121', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('11', '刘能', 'liun', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('12', '谢广坤', 'gungk', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('13', '王长贵', 'changg', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('14', '谢大脚', 'dajiao', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('15', '谢永强', 'yongq', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('16', '王小蒙', 'xiaom', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('17', '赵玉田', 'yutian', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('18', '刘英', 'yingzi', '123456', '0', '1');
-INSERT INTO `teacherinfo` VALUES ('21', '猿来入此', 'ylrc', '123456', '1', '1');
-INSERT INTO `teacherinfo` VALUES ('22', '测试教师', 'teacher', '123456', '0', '1');
+INSERT INTO `teacherinfo` VALUES (1, '李银萍', 'liyinping', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (2, '皮长山', 'pcs', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 1, 1);
+INSERT INTO `teacherinfo` VALUES (3, '方正', 'fangzheng', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (4, '曾勇', 'zengy', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (5, '董勇', 'dongy', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (6, '周应琴', 'zhouyq', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (7, '万红兵', 'wanhb', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (8, '黄小荣', 'hxr123', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (9, '代丽敏', 'dailm', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (10, '赵国强', 'zgq121', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (11, '刘能', 'liun', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (12, '谢广坤', 'gungk', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (13, '王长贵', 'changg', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (14, '谢大脚', 'dajiao', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (15, '谢永强', 'yongq', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (16, '王小蒙', 'xiaom', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (17, '赵玉田', 'yutian', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (18, '刘英', 'yingzi', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+INSERT INTO `teacherinfo` VALUES (21, '猿来入此', 'ylrc', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 1, 1);
+INSERT INTO `teacherinfo` VALUES (22, '测试教师', 'teacher', '90988c514184e2fc2788b98577c95ec2', '04c1bf7a23f94314b79a6119b71ab94f', 0, 1);
+

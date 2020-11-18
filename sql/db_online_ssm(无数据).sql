@@ -190,16 +190,17 @@ CREATE TABLE `gradeinfo` (
 -- Table structure for `studentinfo`
 -- ----------------------------
 DROP TABLE IF EXISTS `studentinfo`;
-CREATE TABLE `studentinfo` (
+CREATE TABLE `studentinfo`  (
   `studentId` int(11) NOT NULL AUTO_INCREMENT,
-  `studentName` varchar(32) NOT NULL,
-  `studentAccount` varchar(64) NOT NULL,
-  `studentPwd` varchar(32) NOT NULL,
+  `studentName` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `studentAccount` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `studentPwd` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `salt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `classId` int(11) NOT NULL,
-  PRIMARY KEY (`studentId`),
-  KEY `FK_Reference_3` (`classId`),
-  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`classId`) REFERENCES `classinfo` (`classId`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`studentId`) USING BTREE,
+  INDEX `FK_Reference_3`(`classId`) USING BTREE,
+  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`classId`) REFERENCES `classinfo` (`classId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of studentinfo
@@ -238,15 +239,16 @@ CREATE TABLE `subjectinfo` (
 -- Table structure for `teacherinfo`
 -- ----------------------------
 DROP TABLE IF EXISTS `teacherinfo`;
-CREATE TABLE `teacherinfo` (
+CREATE TABLE `teacherinfo`  (
   `teacherId` int(11) NOT NULL AUTO_INCREMENT,
-  `teacherName` varchar(10) DEFAULT NULL,
-  `teacherAccount` varchar(10) DEFAULT NULL,
-  `teacherPwd` varchar(10) DEFAULT NULL,
-  `adminPower` int(11) DEFAULT '0',
-  `isWork` int(11) DEFAULT '0',
-  PRIMARY KEY (`teacherId`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+  `teacherName` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `teacherAccount` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `teacherPwd` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `salt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `adminPower` int(11) NULL DEFAULT 0,
+  `isWork` int(11) NULL DEFAULT 0,
+  PRIMARY KEY (`teacherId`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of teacherinfo
